@@ -22,6 +22,7 @@ namespace Personal_Ivanov
     {
         public WorkerPage()
         {
+
             InitializeComponent();
             List<SELLER> currentWorkers = Trade_organizationEntities2.Context().SELLER.ToList();
 
