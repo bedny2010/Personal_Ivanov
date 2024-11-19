@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Хранилище Trade_organizationModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="ORDER">
+    <Key>
+      <PropertyRef Name="Order_ID" />
+    </Key>
+    <Property Name="Order_ID" Type="int" Nullable="false" />
+    <Property Name="Order_date" Type="date" Nullable="false" />
+    <Property Name="Trade_point" Type="int" Nullable="false" />
+    <Property Name="Provider" Type="int" Nullable="false" />
+    <Property Name="Product" Type="int" Nullable="false" />
+    <Property Name="Lot" Type="int" Nullable="false" />
+    <Property Name="Price" Type="money" Nullable="false" />
+  </EntityType>
+  <EntityType Name="POSITION">
+    <Key>
+      <PropertyRef Name="Position_ID" />
+    </Key>
+    <Property Name="Position_ID" Type="int" Nullable="false" />
+    <Property Name="Position_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Salary" Type="money" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PRODUCT">
+    <Key>
+      <PropertyRef Name="Product_ID" />
+    </Key>
+    <Property Name="Product_ID" Type="int" Nullable="false" />
+    <Property Name="Product_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Product_price" Type="money" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PROVIDER">
+    <Key>
+      <PropertyRef Name="Provider_ID" />
+    </Key>
+    <Property Name="Provider_ID" Type="int" Nullable="false" />
+    <Property Name="Provider_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Work_type" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Country" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="City" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Address" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SELLER">
+    <Key>
+      <PropertyRef Name="Seller_ID" />
+    </Key>
+    <Property Name="Seller_ID" Type="int" Nullable="false" />
+    <Property Name="Surename" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Patronumic" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Trade_point" Type="int" Nullable="false" />
+    <Property Name="Position" Type="int" Nullable="false" />
+    <Property Name="Year_birthday" Type="date" Nullable="false" />
+    <Property Name="Gender" Type="nchar" MaxLength="1" Nullable="false" />
+    <Property Name="Address" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="City" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Photo" Type="nvarchar(max)" />
+    <Property Name="Pasport_data" Type="nvarchar" MaxLength="11" Nullable="false" />
+    <Property Name="Phone_number" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="Work_date" Type="date" Nullable="false" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="TRADE_ORGANIZATION">
+    <Key>
+      <PropertyRef Name="Trade_organization_ID" />
+    </Key>
+    <Property Name="Trade_organization_ID" Type="int" Nullable="false" />
+    <Property Name="Trade_organization_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Address" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Director" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Tax_number" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TRADE_POINT">
+    <Key>
+      <PropertyRef Name="Trade_point_ID" />
+    </Key>
+    <Property Name="Trade_point_ID" Type="int" Nullable="false" />
+    <Property Name="Traid_point_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Type" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Trade_organization" Type="int" Nullable="false" />
+    <Property Name="Address" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Manager" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_ORDER_TRADE_POINT">
+    <End Role="TRADE_POINT" Type="Self.TRADE_POINT" Multiplicity="1" />
+    <End Role="ORDER" Type="Self.ORDER" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TRADE_POINT">
+        <PropertyRef Name="Trade_point_ID" />
+      </Principal>
+      <Dependent Role="ORDER">
+        <PropertyRef Name="Trade_point" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_POINT_ORGANIZATION">
+    <End Role="TRADE_ORGANIZATION" Type="Self.TRADE_ORGANIZATION" Multiplicity="1" />
+    <End Role="TRADE_POINT" Type="Self.TRADE_POINT" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TRADE_ORGANIZATION">
+        <PropertyRef Name="Trade_organization_ID" />
+      </Principal>
+      <Dependent Role="TRADE_POINT">
+        <PropertyRef Name="Trade_organization" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_POSITION_SELLER">
+    <End Role="POSITION" Type="Self.POSITION" Multiplicity="1" />
+    <End Role="SELLER" Type="Self.SELLER" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="POSITION">
+        <PropertyRef Name="Position_ID" />
+      </Principal>
+      <Dependent Role="SELLER">
+        <PropertyRef Name="Position" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PRODUCT_ORDER">
+    <End Role="PRODUCT" Type="Self.PRODUCT" Multiplicity="1" />
+    <End Role="ORDER" Type="Self.ORDER" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PRODUCT">
+        <PropertyRef Name="Product_ID" />
+      </Principal>
+      <Dependent Role="ORDER">
+        <PropertyRef Name="Product" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PROVIDER_ORDER">
+    <End Role="PROVIDER" Type="Self.PROVIDER" Multiplicity="1" />
+    <End Role="ORDER" Type="Self.ORDER" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PROVIDER">
+        <PropertyRef Name="Provider_ID" />
+      </Principal>
+      <Dependent Role="ORDER">
+        <PropertyRef Name="Provider" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SELLER_TRADE_POINT">
+    <End Role="TRADE_POINT" Type="Self.TRADE_POINT" Multiplicity="1" />
+    <End Role="SELLER" Type="Self.SELLER" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TRADE_POINT">
+        <PropertyRef Name="Trade_point_ID" />
+      </Principal>
+      <Dependent Role="SELLER">
+        <PropertyRef Name="Trade_point" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Хранилище Trade_organizationModelContainer">
+    <EntitySet Name="ORDER" EntityType="Self.ORDER" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="POSITION" EntityType="Self.POSITION" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PRODUCT" EntityType="Self.PRODUCT" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PROVIDER" EntityType="Self.PROVIDER" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SELLER" EntityType="Self.SELLER" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TRADE_ORGANIZATION" EntityType="Self.TRADE_ORGANIZATION" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TRADE_POINT" EntityType="Self.TRADE_POINT" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_ORDER_TRADE_POINT" Association="Self.FK_ORDER_TRADE_POINT">
+      <End Role="TRADE_POINT" EntitySet="TRADE_POINT" />
+      <End Role="ORDER" EntitySet="ORDER" />
+    </AssociationSet>
+    <AssociationSet Name="FK_POINT_ORGANIZATION" Association="Self.FK_POINT_ORGANIZATION">
+      <End Role="TRADE_ORGANIZATION" EntitySet="TRADE_ORGANIZATION" />
+      <End Role="TRADE_POINT" EntitySet="TRADE_POINT" />
+    </AssociationSet>
+    <AssociationSet Name="FK_POSITION_SELLER" Association="Self.FK_POSITION_SELLER">
+      <End Role="POSITION" EntitySet="POSITION" />
+      <End Role="SELLER" EntitySet="SELLER" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PRODUCT_ORDER" Association="Self.FK_PRODUCT_ORDER">
+      <End Role="PRODUCT" EntitySet="PRODUCT" />
+      <End Role="ORDER" EntitySet="ORDER" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PROVIDER_ORDER" Association="Self.FK_PROVIDER_ORDER">
+      <End Role="PROVIDER" EntitySet="PROVIDER" />
+      <End Role="ORDER" EntitySet="ORDER" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SELLER_TRADE_POINT" Association="Self.FK_SELLER_TRADE_POINT">
+      <End Role="TRADE_POINT" EntitySet="TRADE_POINT" />
+      <End Role="SELLER" EntitySet="SELLER" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

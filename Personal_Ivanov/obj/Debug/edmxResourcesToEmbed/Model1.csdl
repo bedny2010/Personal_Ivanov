@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Trade_organizationModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="ORDER">
+    <Key>
+      <PropertyRef Name="Order_ID" />
+    </Key>
+    <Property Name="Order_ID" Type="Int32" Nullable="false" />
+    <Property Name="Order_date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Trade_point" Type="Int32" Nullable="false" />
+    <Property Name="Provider" Type="Int32" Nullable="false" />
+    <Property Name="Product" Type="Int32" Nullable="false" />
+    <Property Name="Lot" Type="Int32" Nullable="false" />
+    <Property Name="Price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <NavigationProperty Name="TRADE_POINT1" Relationship="Self.FK_ORDER_TRADE_POINT" FromRole="ORDER" ToRole="TRADE_POINT" />
+    <NavigationProperty Name="PRODUCT1" Relationship="Self.FK_PRODUCT_ORDER" FromRole="ORDER" ToRole="PRODUCT" />
+    <NavigationProperty Name="PROVIDER1" Relationship="Self.FK_PROVIDER_ORDER" FromRole="ORDER" ToRole="PROVIDER" />
+  </EntityType>
+  <EntityType Name="POSITION">
+    <Key>
+      <PropertyRef Name="Position_ID" />
+    </Key>
+    <Property Name="Position_ID" Type="Int32" Nullable="false" />
+    <Property Name="Position_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Salary" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <NavigationProperty Name="SELLER" Relationship="Self.FK_POSITION_SELLER" FromRole="POSITION" ToRole="SELLER" />
+  </EntityType>
+  <EntityType Name="PRODUCT">
+    <Key>
+      <PropertyRef Name="Product_ID" />
+    </Key>
+    <Property Name="Product_ID" Type="Int32" Nullable="false" />
+    <Property Name="Product_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Product_price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <NavigationProperty Name="ORDER" Relationship="Self.FK_PRODUCT_ORDER" FromRole="PRODUCT" ToRole="ORDER" />
+  </EntityType>
+  <EntityType Name="PROVIDER">
+    <Key>
+      <PropertyRef Name="Provider_ID" />
+    </Key>
+    <Property Name="Provider_ID" Type="Int32" Nullable="false" />
+    <Property Name="Provider_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Work_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="ORDER" Relationship="Self.FK_PROVIDER_ORDER" FromRole="PROVIDER" ToRole="ORDER" />
+  </EntityType>
+  <EntityType Name="SELLER">
+    <Key>
+      <PropertyRef Name="Seller_ID" />
+    </Key>
+    <Property Name="Seller_ID" Type="Int32" Nullable="false" />
+    <Property Name="Surename" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Patronumic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Trade_point" Type="Int32" Nullable="false" />
+    <Property Name="Position" Type="Int32" Nullable="false" />
+    <Property Name="Year_birthday" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Gender" Type="String" MaxLength="1" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Photo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Pasport_data" Type="String" MaxLength="11" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Phone_number" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Work_date" Type="DateTime" Nullable="false" Precision="0" />
+    <NavigationProperty Name="POSITION1" Relationship="Self.FK_POSITION_SELLER" FromRole="SELLER" ToRole="POSITION" />
+    <NavigationProperty Name="TRADE_POINT1" Relationship="Self.FK_SELLER_TRADE_POINT" FromRole="SELLER" ToRole="TRADE_POINT" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="TRADE_ORGANIZATION">
+    <Key>
+      <PropertyRef Name="Trade_organization_ID" />
+    </Key>
+    <Property Name="Trade_organization_ID" Type="Int32" Nullable="false" />
+    <Property Name="Trade_organization_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Director" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Tax_number" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="TRADE_POINT" Relationship="Self.FK_POINT_ORGANIZATION" FromRole="TRADE_ORGANIZATION" ToRole="TRADE_POINT" />
+  </EntityType>
+  <EntityType Name="TRADE_POINT">
+    <Key>
+      <PropertyRef Name="Trade_point_ID" />
+    </Key>
+    <Property Name="Trade_point_ID" Type="Int32" Nullable="false" />
+    <Property Name="Traid_point_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Trade_organization" Type="Int32" Nullable="false" />
+    <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Manager" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="ORDER" Relationship="Self.FK_ORDER_TRADE_POINT" FromRole="TRADE_POINT" ToRole="ORDER" />
+    <NavigationProperty Name="SELLER" Relationship="Self.FK_SELLER_TRADE_POINT" FromRole="TRADE_POINT" ToRole="SELLER" />
+    <NavigationProperty Name="TRADE_ORGANIZATION1" Relationship="Self.FK_POINT_ORGANIZATION" FromRole="TRADE_POINT" ToRole="TRADE_ORGANIZATION" />
+  </EntityType>
+  <Association Name="FK_ORDER_TRADE_POINT">
+    <End Role="TRADE_POINT" Type="Self.TRADE_POINT" Multiplicity="1" />
+    <End Role="ORDER" Type="Self.ORDER" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TRADE_POINT">
+        <PropertyRef Name="Trade_point_ID" />
+      </Principal>
+      <Dependent Role="ORDER">
+        <PropertyRef Name="Trade_point" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PRODUCT_ORDER">
+    <End Role="PRODUCT" Type="Self.PRODUCT" Multiplicity="1" />
+    <End Role="ORDER" Type="Self.ORDER" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PRODUCT">
+        <PropertyRef Name="Product_ID" />
+      </Principal>
+      <Dependent Role="ORDER">
+        <PropertyRef Name="Product" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PROVIDER_ORDER">
+    <End Role="PROVIDER" Type="Self.PROVIDER" Multiplicity="1" />
+    <End Role="ORDER" Type="Self.ORDER" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PROVIDER">
+        <PropertyRef Name="Provider_ID" />
+      </Principal>
+      <Dependent Role="ORDER">
+        <PropertyRef Name="Provider" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_POSITION_SELLER">
+    <End Role="POSITION" Type="Self.POSITION" Multiplicity="1" />
+    <End Role="SELLER" Type="Self.SELLER" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="POSITION">
+        <PropertyRef Name="Position_ID" />
+      </Principal>
+      <Dependent Role="SELLER">
+        <PropertyRef Name="Position" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SELLER_TRADE_POINT">
+    <End Role="TRADE_POINT" Type="Self.TRADE_POINT" Multiplicity="1" />
+    <End Role="SELLER" Type="Self.SELLER" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TRADE_POINT">
+        <PropertyRef Name="Trade_point_ID" />
+      </Principal>
+      <Dependent Role="SELLER">
+        <PropertyRef Name="Trade_point" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_POINT_ORGANIZATION">
+    <End Role="TRADE_ORGANIZATION" Type="Self.TRADE_ORGANIZATION" Multiplicity="1" />
+    <End Role="TRADE_POINT" Type="Self.TRADE_POINT" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TRADE_ORGANIZATION">
+        <PropertyRef Name="Trade_organization_ID" />
+      </Principal>
+      <Dependent Role="TRADE_POINT">
+        <PropertyRef Name="Trade_organization" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Trade_organizationEntities2" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="ORDER" EntityType="Self.ORDER" />
+    <EntitySet Name="POSITION" EntityType="Self.POSITION" />
+    <EntitySet Name="PRODUCT" EntityType="Self.PRODUCT" />
+    <EntitySet Name="PROVIDER" EntityType="Self.PROVIDER" />
+    <EntitySet Name="SELLER" EntityType="Self.SELLER" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="TRADE_ORGANIZATION" EntityType="Self.TRADE_ORGANIZATION" />
+    <EntitySet Name="TRADE_POINT" EntityType="Self.TRADE_POINT" />
+    <AssociationSet Name="FK_ORDER_TRADE_POINT" Association="Self.FK_ORDER_TRADE_POINT">
+      <End Role="TRADE_POINT" EntitySet="TRADE_POINT" />
+      <End Role="ORDER" EntitySet="ORDER" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PRODUCT_ORDER" Association="Self.FK_PRODUCT_ORDER">
+      <End Role="PRODUCT" EntitySet="PRODUCT" />
+      <End Role="ORDER" EntitySet="ORDER" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PROVIDER_ORDER" Association="Self.FK_PROVIDER_ORDER">
+      <End Role="PROVIDER" EntitySet="PROVIDER" />
+      <End Role="ORDER" EntitySet="ORDER" />
+    </AssociationSet>
+    <AssociationSet Name="FK_POSITION_SELLER" Association="Self.FK_POSITION_SELLER">
+      <End Role="POSITION" EntitySet="POSITION" />
+      <End Role="SELLER" EntitySet="SELLER" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SELLER_TRADE_POINT" Association="Self.FK_SELLER_TRADE_POINT">
+      <End Role="TRADE_POINT" EntitySet="TRADE_POINT" />
+      <End Role="SELLER" EntitySet="SELLER" />
+    </AssociationSet>
+    <AssociationSet Name="FK_POINT_ORGANIZATION" Association="Self.FK_POINT_ORGANIZATION">
+      <End Role="TRADE_ORGANIZATION" EntitySet="TRADE_ORGANIZATION" />
+      <End Role="TRADE_POINT" EntitySet="TRADE_POINT" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
