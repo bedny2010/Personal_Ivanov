@@ -2,6 +2,7 @@
 using Personal_Ivanov;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -53,79 +54,72 @@ namespace Personal_Ivanov
                 LogoImage.Source = new BitmapImage(new Uri(myOpenFileDialog.FileName));
             }
         }
-        private void SaveBtn_Click(Object sender, RoutedEventArgs e)
+        private void SaveBtn_Click(object sender, RoutedEventArgs e)
         {
             StringBuilder errors = new StringBuilder();
+            bool isNewRecord = currentSeller.Seller_ID == 0;
+
+            // Заполнение данных currentSeller (Проверки на null уже присутствуют в валидации)
             currentSeller.Position = ComboPosition.SelectedIndex + 1;
             currentSeller.Trade_point = PointCBox.SelectedIndex + 1;
             currentSeller.Work_date = (DateTime)DateDatapicker.SelectedDate;
             currentSeller.Year_birthday = (DateTime)BirthdayDateDatapicker.SelectedDate;
-            
-            
-            
-            if (string.IsNullOrWhiteSpace(currentSeller.Surename))
-                errors.AppendLine("Введите фамилию!");
-            if (string.IsNullOrWhiteSpace(currentSeller.Name))
-                errors.AppendLine("Введите имя!");
-            if (string.IsNullOrWhiteSpace(currentSeller.Patronumic))
-                errors.AppendLine("Введите отчество!");
-            
-            if (string.IsNullOrWhiteSpace(currentSeller.City))
-                errors.AppendLine("Введите город!");
-            if (string.IsNullOrWhiteSpace(currentSeller.Address))
-                errors.AppendLine("Введите адрес!");
+            currentSeller.Surename = SurenameTBox.Text.Trim();
+            currentSeller.Name = NameTBox.Text.Trim();
+            currentSeller.Patronumic = PatronumicTBox.Text.Trim();
+            currentSeller.City = CityTextBox.Text.Trim();
+            currentSeller.Address = AddressTextBox.Text.Trim();
+            currentSeller.Pasport_data = PasportTBox.Text.Trim();
+            currentSeller.Phone_number = PhoneTBox.Text.Trim();
+           
 
+            // Валидация
+            if (string.IsNullOrWhiteSpace(currentSeller.Surename)) errors.AppendLine("Введите фамилию!");
+            if (string.IsNullOrWhiteSpace(currentSeller.Name)) errors.AppendLine("Введите имя!");
+            if (string.IsNullOrWhiteSpace(currentSeller.Patronumic)) errors.AppendLine("Введите отчество!");
+            if (string.IsNullOrWhiteSpace(currentSeller.City)) errors.AppendLine("Введите город!");
+            if (string.IsNullOrWhiteSpace(currentSeller.Address)) errors.AppendLine("Введите адрес!");
+            if (string.IsNullOrWhiteSpace(currentSeller.Pasport_data)) errors.AppendLine("Введите паспортные данные!");
+            if (string.IsNullOrWhiteSpace(currentSeller.Phone_number)) errors.AppendLine("Введите номер телефона!");
+            if (BirthdayDateDatapicker.SelectedDate == null) errors.AppendLine("Введите дату рождения!");
+            if (DateDatapicker.SelectedDate == null) errors.AppendLine("Введите дату начала работы!");
+            if (ComboGender.SelectedIndex == -1) errors.AppendLine("Введите пол!");
+            else currentSeller.Gender = ComboGender.SelectedIndex == 0 ? "М" : "Ж"; // Более компактная запись
 
-            if (string.IsNullOrWhiteSpace(currentSeller.Pasport_data))
-                errors.AppendLine("Введите паспортные данные!");
-            if (string.IsNullOrWhiteSpace(currentSeller.Phone_number))
-                errors.AppendLine("Введите номер телефона!");
-            if (string.IsNullOrWhiteSpace(currentSeller.Year_birthday.ToString()))
-                errors.AppendLine("Введите дату рождения!");
-            if (string.IsNullOrWhiteSpace(currentSeller.Work_date.ToString()))
-                errors.AppendLine("Введите дату начала работы!");
-
-            if (ComboGender.SelectedIndex == 0)
-            {
-                currentSeller.Gender = "М";
-            }
-            else if (ComboGender.SelectedIndex == 1)
-            {
-                currentSeller.Gender = "Ж";
-            }
-            else
-            { errors.AppendLine("Введите пол!"); }
 
             if (errors.Length > 0)
             {
                 MessageBox.Show(errors.ToString());
                 return;
             }
-            
-           
 
-
-            
-            if (currentSeller.Seller_ID == 0)
-            {
-
-                Trade_organizationEntities2.Context().SELLER.Add(currentSeller);
-            }
             try
             {
-                Trade_organizationEntities2.Context().SaveChanges();
+                if (!isNewRecord)
+                {
+                    // Обновление существующей записи
+                    Trade_organizationEntities2.Context().Entry(currentSeller).State = EntityState.Modified;
+                    Trade_organizationEntities2.Context().SaveChanges();
+                }
+                else
+                {
+                    // Добавление новой записи с инкрементным ID
+                    Trade_organizationEntities2.Context().SELLER.Add(currentSeller);
+                    Trade_organizationEntities2.Context().SaveChanges();
+                }
+
                 MessageBox.Show("Данные сохранены!");
                 Manager.MainFrame.GoBack();
-
             }
-            catch
+            catch (Exception ex)
             {
-
-                MessageBox.Show("Не удалось сохранить данные!");
+                MessageBox.Show($"Не удалось сохранить данные: {ex.Message}");
                 Manager.MainFrame.GoBack();
             }
         }
-        
+
+
+
         private void DeleteBtn_Click(object sender, RoutedEventArgs e)
         {
             var currentSeller = (sender as Button).DataContext as SELLER; 
